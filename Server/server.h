@@ -60,6 +60,8 @@ void Terminaison();
 	La fonction traitement(char *message) 
 	s'occupe de la gestion du message reçu.
 */
+
+/* Traite le message reçu selon la requete qu'il contient */
 void traitement(char *message);
 
 #endif
