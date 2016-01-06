@@ -1,4 +1,10 @@
-
+/*####################################################################
+#		SMP Messenger Client																						 #
+#--------------------------------------------------------------------#
+#		@Authors : Alexis GARDAVOIR && Samuel GARCIA										 #
+#--------------------------------------------------------------------#
+#		Définition des fonctions :: client.h														 #
+####################################################################*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -33,7 +39,7 @@ int finTampon;
  * Utilisez localhost pour un fonctionnement local.
  */
 int Initialisation(char *machine) {
-	return InitialisationAvecService(machine, "13214");
+	return InitialisationAvecService(machine, "14215");
 }
 
 /* Initialisation.
