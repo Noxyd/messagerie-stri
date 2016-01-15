@@ -18,7 +18,7 @@
 
 #include <errno.h>
 
-#include "serveur.h"
+#include "server.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -268,8 +268,101 @@ void Terminaison() {
 }
 
 /* 
-	La fonction traitement(char *message) 
+	FONCTIONS TIERCES
+*/
+
+
+/* get_word() met dans la variable mot le number_word-ieme mot de texte et renvoie la taille de ceci de celui-ci */
+int get_word(char *texte, char *mot, int number_word){
+
+	/* varibles */
+	int nbr_char = 0; /*nombre de caractere actuellement parcourru*/ 
+	char char_crt = 0; /*valeur du caractere courant*/
+	int stop = 0; /*variable booléenne servant à stopper la boucle de parcours*/
+	int nb_word = number_word; /*permet de compter le nombre de mot*/
+	int ind_word = 0; /*indice du mot, permettant l'incrémentation du mot renvoyé*/
+
+
+	if(texte != NULL){ /*si le texte n'est pas vide : traitement et parcours*/
+		do { /*parcours du texte*/
+			char_crt = texte[nbr_char]; /*acquisition de la lettre courante*/
+			nbr_char++;
+
+			if(nb_word == 0 && (char_crt == '\n' || char_crt == ' ' || char_crt == '\0')){ /*si nous sommes en cours d'acquisition mais qu'on a un espace, un retour à la ligne ou la fin du texte*/
+				mot[ind_word] = '\0'; /*on ajoute à mot un EOF*/
+				stop = 1;
+			}
+			else if(nb_word == 0){ /*si on recherche un mot*/
+				mot[ind_word] = char_crt; /*acquisition de la lettre courante et incrémentation de ind_word*/
+				ind_word++;
+			}
+			else if(char_crt == '\n' || char_crt == ' '){ /*Si on a un espace ou un retour à la ligne*/
+				nb_word--; /*on passe à un autre mot*/
+			}
+
+			if(char_crt == '\0') /*si le texte est fini*/
+				stop = 1; /*On stoppe la boucle*/
+
+		} while(!stop);
+
+		/*On retourne la taille du mot*/
+		return ind_word;
+	}
+	else /*sinon on retourne 0*/
+		return 0; 		
+
+}
+
+/*
+	Fonctions relatives au traitement d'un message
+	à part la derniere fonction (traitement()), les autres
+	ne sont pas mentionnées dans le .h car elles ne sont
+	accessible qu'en passant par traitement()
+*/ 
+
+int traitement_CONNECT(char *message){
+	
+}
+
+int traitement_HAVE(char *message){
+
+}
+
+int traitement_SEND(char *message){
+
+}
+
+int traitement_DISCONNECT(char *message){
+
+}
+
+/* 
+	La fonction int traitement(char *message) 
 	s'occupe de la gestion du message reçu.
 */
-void traitement(char *message);
+
+int traitement(char *message){
+	
+	int retour;
+	char mot[20];
+	
+	retour = get_word(message, mot, 4);
+
+	printf("%d : %s\n", retour, mot);
+	return 0;
+
+	if(message[0] == 'C') /*traitement CONNECT*/
+		retour = traitement_CONNECT(message);
+
+	else if(message[0] == 'H') /*traitement HAVE*/
+		retour = traitement_HAVE(message);
+
+	else if(message[0] == 'S') /*traitement SEND*/
+		retour = traitement_SEND(message);
+
+	else if(message[0] == 'D') /*traitement DISCONNECT*/
+		retour = traitement_DISCONNECT(message);
+	
+	return retour;
+}
 
