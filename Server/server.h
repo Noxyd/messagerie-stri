@@ -62,7 +62,7 @@ void Terminaison();
 */
 
 /* Traite le message reçu selon la requete qu'il contient */
-void traitement(char *message);
+int traitement(char *message);
 
 #endif
 
