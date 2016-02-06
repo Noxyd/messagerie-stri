@@ -52,4 +52,28 @@ int EmissionBinaire(char *donnees, size_t taille);
  */
 void Terminaison();
 
+/* Demande les identifiants de l'utilisateur.
+ */
+int DemandeID(char **username, char **password);
+
+/* Pour vider le buffer
+ */
+void CleanBuffer();
+
+/*  Interface utilisateur : Menu de connexion
+ */
+void Welcome();
+
+/*  Interface utilisateur : Ecran de choix
+ */
+int ChoiceScreen(char *username, char *sessionid);
+
+/* get_word() met dans la variable mot le number_word-ieme mot de texte et renvoie la taille de ceci de celui-ci */
+/* /!\ mot doit être déclaré sous la forme mot[int] avant l'appel de la fonction*/
+int get_word(char *texte, char *mot, int number_word);
+
+/* Deconnexion de l'utilisateur
+ */
+int Logout();
+
 #endif
