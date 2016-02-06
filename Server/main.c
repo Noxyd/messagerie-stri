@@ -1,24 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "serveur.h"
+#include "server.h"
 
 int main() {
 	char *message = NULL;
+
+	/*MARQ_ESSAI
+	message = "CONNECT Alexis 0001";*/
 
 	Initialisation();
 
 	while(1) {
 		int fini = 0;
 	
-		AttenteClient();
+		/*MARQ_ESSAI */AttenteClient();
 	
 		while(!fini) {
-			message = Reception();
+			/*MARQ_ESSAI */message = Reception();
 
 			if(message != NULL) {
 				printf("J'ai recu: %s\n", message);
-				traitement(message);
-				free(message);
+
+				/* Le Serveur traite le message reçu */
+				traitement(message); 
+
+				/* Le Serveur détruit le message */
+				/*MARQ_ESSAI */free(message);
 		
 				if(Emission("Test de message serveur.\n")!=1) {
 					printf("Erreur d'emission\n");
