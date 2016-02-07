@@ -76,4 +76,6 @@ int get_word(char *texte, char *mot, int number_word);
  */
 int Logout();
 
+void connectUser();
+
 #endif

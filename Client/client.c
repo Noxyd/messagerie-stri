@@ -230,7 +230,7 @@ int DemandeID(char **username, char **password){
 	CleanBuffer();
 	/* Saisie du mot de passe */
 	printf("\tMot de passe: ");
-	//try = scanf("%20s",&tmp_password );
+	try = scanf("%20s",&tmp_password );
 
 	CleanBuffer();
 
@@ -243,11 +243,11 @@ int DemandeID(char **username, char **password){
 		puts("client.c: Erreur lors de la copie de l'identifiant.");
 		return EXIT_FAILURE;
 	}
-	/*if(strcpy(*password, tmp_password) == NULL){
+	if(strcpy(*password, tmp_password) == NULL){
 		puts("client.c: Erreur lors de la copie du mot de passe.");
 		return EXIT_FAILURE;
-	}*/
-	password = getPass("Mot de passe: ");
+	}
+	//*password = getPass("Mot de passe: ");
 
 	return EXIT_OK;
 }
@@ -280,15 +280,13 @@ int ChoiceScreen(char *username, char *sessionid){
 
 			break;
 		case 3:
-			if(Logout() == 1){
+			if(Logout(sessionid) == 1){
 				puts("Erreur lors de la déconnexion.");
 				ChoiceScreen(username, sessionid);
 			}
-			printf("3\n" );
 			return EXIT_OK;
 			break;
 		default:
-			printf("4\n");
 			ChoiceScreen(username,sessionid);
 	}
 }
@@ -354,9 +352,14 @@ int cmp_word(char *wd1, char *wd2, int lg){
 }
 
 
-int Logout(){
+int Logout(char *sessionid){
+	char requete[1024] = {0};
+
 	system("clear");
 	printf("Fin de connexion, à bientôt ...\n");
-	printf("2\n" );
+	strcat(requete,"DISCONNECT ");
+	strcat(requete, sessionid);
+	Emission(requete);
+	Terminaison();
 	return EXIT_OK;
 }

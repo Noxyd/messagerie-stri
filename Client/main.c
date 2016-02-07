@@ -46,7 +46,7 @@ int main() {
 	do{
 		Welcome(); //Affichage de l'interface graphique
 
-		/* Initialisation de la connexion avec le serveur */
+		//Initialisation de la connexion avec le serveur
 		printf("Test de la connexion avec le serveur.\n");
 		if(Initialisation(srvAddress) != 1) {
 				printf("Le serveur est hors ligne ...\n");
@@ -54,7 +54,7 @@ int main() {
 		} else {
 				printf("Le serveur est en ligne.");
 		}
-
+		//puts("Phase de test, on supprime le test de connexion au serveur.");
 		printf("\n**************************************************************\n\n");
 
 		/* Saise des identifiants */
@@ -63,6 +63,7 @@ int main() {
 			return EXIT_FAILURE;
 		}
 
+		//connectUser(&username, &password);
 		/* Création de la requete de connexion */
 		strcat(requete,"CONNECT ");
 		strcat(requete,username);
