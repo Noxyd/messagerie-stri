@@ -56,7 +56,7 @@ int finTampon;
  * Creation du serveur.
  */
 int Initialisation() {
-	return InitialisationAvecService("14215");
+	return InitialisationAvecService("13214");
 }
 
 /* Initialisation.
@@ -544,11 +544,87 @@ int traitement_CONNECT(char *message){
 	return 0;
 }
 
+/*fonction permettant l'envoie d'une liste de mail*/
+int send_mail_LIST(char *id){
+	FILE* liste = NULL; /*pointeur sur le fichier*/
+	char ligne[LIMIT_CHAR*2+1] = ""; /*chaine de char accueillant la ligne courante dans le fichier*/
+	
+	char wd_in_list[LIMIT_CHAR] = ""; /*wd contenu dans la ligne courante*/
+	int lg_wd_list = 0; /*longueur de l'wd contenu dans la ligne courante*/
+
+	char data[LIMIT_CHAR*4+3] = ""; /*va accueillir les 4 lignes à envoyer*/
+
+	int numero_ligne = 0;
+
+	char id_mail[LIMIT_CHAR]; /*premier mot*/
+	char user_from[LIMIT_CHAR]; /* nom de l'expéditeur (3e mot)*/
+	
+	int OK = 0;
+
+	/*verification dans le fichier*/
+	liste = fopen("liste_message", "r"); /*ouverture du fichier*/
+
+	if(liste != NULL){ /* si l'ouverture s'est correctement passée*/
+		while(!OK && fgets(ligne, LIMIT_CHAR*2+1, liste) != NULL){ /* parcours du fichier liste*/
+
+			lg_wd_list = get_word(ligne, id_mail, 0); /*possible id_mail à envoyer*/
+			numero_ligne+=1; /*incrementation du numero de ligne*/
+	
+
+			fgets(ligne, LIMIT_CHAR*2+1, liste); /*récupération seconde ligne*/
+			numero_ligne+=1; /*incrementation du numero de ligne*/
+
+			lg_wd_list = get_word(ligne, user_from, 1); /*recuperation nom de l'expediteur*/
+
+			fgets(ligne, LIMIT_CHAR*2+1, liste); /*récupération troisieme ligne*/
+			numero_ligne+=1; /*incrementation du numero de ligne*/
+
+			lg_wd_list = get_word(ligne, wd_in_list, 1); /*recuperation nom du destinataire*/
+
+			if(cmp_word(id, wd_in_list, lg_wd_list)){/*Si les id correspondent*/
+				/*si les id correspondent : on envoie 4 lignes contenant : id_mail/nFrom/nTo/nObj/n*/
+				printf("HAVE : Mail trouve.\n");
+
+				strcat(data, id_mail); /*ajout de l'id mail*/
+				strcat(data, "\n");
+				strcat(data, "From: "); /*ajout du From:*/
+				strcat(data, user_from); /*ajout du user_From:*/
+				strcat(data, "\n");
+				
+				strcat(data, ligne); /*ajout du To:*/
+
+				fgets(ligne, LIMIT_CHAR*2+1, liste); /*ligne suivante*/
+				numero_ligne+=1;
+				strcat(data, ligne); /*ajout du Obj:*/
+				
+				/*MARQUEUR ICI*/
+			
+								
+				
+			}
+
+		} /*fin du parcours*/
+
+		fclose(liste);
+		
+	}
+	else{
+		printf("HAVE : LISTE, fichier inexistant\n"); /*ERREUR lors de l'ouverture du fichier - ERR INTERNAL*/
+		Emission("ERR INTERNAL unable_to_find_fic\n");
+	}
+
+	return OK;
+	
+
+	
+}
 
 /* fonction utilisée dans traitement_HAVE, retourne 1 si l'identifiant de session se trouve dans le fichier*/
 int traitement_HAVE_LIST(char *id, char *arg){
 	FILE* liste = NULL; /*pointeur sur le fichier*/
 	char ligne[LIMIT_CHAR*2+1] = ""; /*chaine de char accueillant la ligne courante dans le fichier*/
+
+	char id_nom[LIMIT_CHAR] = ""; /*variable accueillant le nom de l'utilisateur de la session*/
 
 	int numero_ligne = 0;
 
@@ -568,6 +644,7 @@ int traitement_HAVE_LIST(char *id, char *arg){
 
 			if(cmp_word(id, wd_in_list, lg_wd_list)){/*Si les id correspondent*/
 				OK = 1;
+				get_word(ligne, id_nom, 1); /*On récupère le nom de l'utilisateur*/
 				printf("HAVE : ID de session trouve.\n");			
 			}
 
@@ -577,10 +654,11 @@ int traitement_HAVE_LIST(char *id, char *arg){
 		
 		if(OK){ /*si un identifiant a été trouvée*/
 			/*si un identifiant a été trouvée il faut soit :
-			- si arg = 0 : envoie une liste de mail. 
+			- si arg = 0 : envoie une liste de mail, la ligne de mail contient les quatres premieres lignes.
 			- si arg != 0 : envoie un message précis dont l'ID est arg.*/
 			 
-			/* MARQUEUR : DERNIER ARRET ICI*/
+			send_mail_LIST(id);
+			
 
 		}			
 		else {
