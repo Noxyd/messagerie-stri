@@ -1,0 +1,10 @@
+#-----------------------------------------------#
+#	LISTE DES CORRECTIONS A APPORTER	#
+#-----------------------------------------------#
+
+* Le 10/02/16 : 
+Lorsqu'un utilisateur se connecte, se déconnecte et se reconnecte, 
+le même id lui ai attribué.
+
+ 
+

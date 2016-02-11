@@ -78,4 +78,6 @@ int Logout();
 
 void connectUser();
 
+int writeMessage();
+
 #endif
